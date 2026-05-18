@@ -12,6 +12,12 @@ A secure, private note-taking web application built on Rails. Authenticated user
 - **Security**: Active Record Encryption required for note body and attachment metadata — non-negotiable
 - **Access**: No user registration pathway — users created via `rails console` only
 - **Tech Stack**: Rails 8.1 — no framework changes
+
+### Contribution Rules
+
+- AI and Agents must not write or commit to git, instead instruct the user to check and write to git.
+- Unit tests and/or integration tests must be added where applicable.
+- Tests must not be re-written, and every feature must be tested exactly once unless explicitly specified otherwise.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:codebase/STACK.md -->
