@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-05-18T19:46:05.673Z"
+status: in_progress
+last_updated: "2026-05-18T20:58:07.149Z"
 progress:
   total_phases: 3
-  completed_phases: 0
-  total_plans: 2
-  completed_plans: 1
-  percent: 0
+  completed_phases: 1
+  total_plans: 6
+  completed_plans: 2
+  percent: 33
 ---
 
 # Project State: GSD Notes App
@@ -19,21 +19,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-18)
 
 **Core value:** Each user's notes are encrypted at rest and invisible to every other user
-**Current focus:** Phase 1 — Authentication & User Foundation
+**Current focus:** Phase 2 — Notes CRUD with Encryption
 
 ## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 1 | Authentication & User Foundation | ○ Pending | — |
+| 1 | Authentication & User Foundation | ✓ Complete | 2/2 |
 | 2 | Notes CRUD with Encryption | ○ Pending | — |
 | 3 | Polish & Hardening | ○ Pending | — |
 
 ## Current Phase
 
-**Phase 1: Authentication & User Foundation**
-Goal: A user can sign in, maintain a session, and sign out. Unauthenticated access is blocked.
+**Phase 2: Notes CRUD with Encryption**
+Goal: An authenticated user can create, view, edit, and delete their own encrypted notes — each with a markdown body and/or a file attachment.
 
 ## History
 
 - 2026-05-18 — Project initialized, roadmap created (3 phases, 19 requirements)
+- 2026-05-18 — Phase 1 complete: Devise auth, User model, sign-in UI, system tests passing (AUTH-01–04, SEC-02)
