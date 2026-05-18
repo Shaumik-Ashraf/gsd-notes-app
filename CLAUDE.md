@@ -151,6 +151,21 @@ A secure, private note-taking web application built on Rails. Authenticated user
 No project skills found. Add skills to any of: `.claude/skills/`, `.agents/skills/`, `.cursor/skills/`, `.github/skills/`, or `.codex/skills/` with a `SKILL.md` index file.
 <!-- GSD:skills-end -->
 
+## Setup: Encryption Keys
+
+Active Record Encryption keys must exist in credentials before running `bin/rails db:migrate` or `bin/rails server`. Without them the app will raise a missing-encryption-config error on boot.
+
+**One-time setup on any new developer machine:**
+
+1. Generate keys: `bin/rails db:encryption:init` — prints `active_record_encryption:` YAML with `primary_key`, `deterministic_key`, `key_derivation_salt`
+2. Open credentials: `EDITOR="nano" bin/rails credentials:edit` (or substitute your editor)
+3. Paste the generated block at the top level of the credentials file
+4. Save and close — `config/credentials.yml.enc` is re-encrypted automatically
+5. Verify: `bin/rails runner 'p Rails.application.credentials.dig(:active_record_encryption, :primary_key).present?'` must print `true`
+
+**Keys live at:** `config/credentials.yml.enc` under `active_record_encryption.primary_key`, `.deterministic_key`, `.key_derivation_salt`
+**Never:** commit `config/master.key`, store keys in `.env`, or hardcode them anywhere.
+
 <!-- GSD:workflow-start source:GSD defaults -->
 ## GSD Workflow Enforcement
 

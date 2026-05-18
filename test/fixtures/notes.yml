@@ -1,0 +1,2 @@
+# No fixture notes defined — model tests create notes programmatically
+# to avoid Active Record Encryption / fixture loading incompatibilities.
