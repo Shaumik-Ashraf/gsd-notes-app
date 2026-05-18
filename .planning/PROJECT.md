@@ -24,6 +24,7 @@ Each user's notes are encrypted at rest and invisible to every other user — th
 - [ ] User can create a note with a markdown body and an optional file attachment
 - [ ] User can edit a note (body and/or attachment)
 - [ ] User can delete a note
+- [ ] A note must have at least a body or a file attachment — model validation rejects notes with neither
 - [ ] Note title is derived from the first line of the body; falls back to attachment filename when body is absent
 - [ ] Notes are listed in a table showing: derived title, created date, updated date, attachment indicator
 - [ ] User can view a note with the markdown body rendered as HTML
