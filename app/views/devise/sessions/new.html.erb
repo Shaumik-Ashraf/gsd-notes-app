@@ -1,0 +1,25 @@
+<div class="sign-in-container">
+  <div class="sign-in-card">
+    <h1 class="sign-in-title">Notes</h1>
+
+    <% if flash[:alert] %>
+      <p class="sign-in-error"><%= flash[:alert] %></p>
+    <% end %>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password, autocomplete: "current-password", required: true %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Sign in" %>
+      </div>
+    <% end %>
+  </div>
+</div>
