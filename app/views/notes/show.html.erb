@@ -1,0 +1,29 @@
+<%= link_to "← Notes", notes_path, class: "link-muted" %>
+
+<h1><%= @note.derived_title %></h1>
+
+<p class="note-meta">
+  Created <%= l(@note.created_at, format: :short) %> · Updated <%= l(@note.updated_at, format: :short) %>
+</p>
+
+<% if @note.file.attached? %>
+  <p class="note-attachment">
+    Attachment: <%= link_to "Download #{@note.file.filename}", rails_blob_path(@note.file, disposition: "attachment") %>
+  </p>
+<% end %>
+
+<hr>
+
+<% if @note.body.present? %>
+  <div class="note-body">
+    <%= sanitize(render_markdown(@note.body), tags: %w[p h1 h2 h3 h4 h5 h6 ul ol li a code pre blockquote strong em br hr], attributes: %w[href]) %>
+  </div>
+<% end %>
+
+<div class="note-actions">
+  <%= link_to "Edit", edit_note_path(@note), class: "link-accent" %>
+  <%= button_to "Delete note", @note, method: :delete,
+        data: { turbo_confirm: "Delete this note? This cannot be undone." },
+        class: "btn-destructive",
+        form: { data: { turbo: false } } %>
+</div>

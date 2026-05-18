@@ -81,4 +81,59 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     post notes_path, params: { note: { body: "owned" } }
     assert_equal @user, Note.last.user
   end
+
+  # ---------- show ----------
+
+  test "GET /notes/:id renders note show for signed-in owner" do
+    note = @user.notes.create!(body: "# Hello\n\nSome **bold** text")
+    sign_in @user
+    get note_path(note)
+    assert_response :ok
+    assert_match "<h1>Hello</h1>", response.body
+    assert_match "<strong>bold</strong>", response.body
+  end
+
+  test "show page includes download link when attachment present" do
+    note = @user.notes.create!(body: "with file")
+    note.file.attach(io: StringIO.new("data"), filename: "doc.pdf", content_type: "application/pdf")
+    sign_in @user
+    get note_path(note)
+    assert_response :ok
+    assert_match "Download doc.pdf", response.body
+    assert_match "rails/active_storage", response.body
+  end
+
+  test "show page does not render body section when body blank" do
+    note = @user.notes.new
+    note.file.attach(io: StringIO.new("data"), filename: "only.pdf", content_type: "application/pdf")
+    note.save!
+    sign_in @user
+    get note_path(note)
+    assert_response :ok
+    assert_no_match "note-body", response.body
+  end
+
+  test "show page does not render attachment section when no file" do
+    note = @user.notes.create!(body: "body only")
+    sign_in @user
+    get note_path(note)
+    assert_response :ok
+    assert_no_match "note-attachment", response.body
+  end
+
+  test "GET /notes/:id for another user's note returns 404" do
+    other_note = @user_b.notes.create!(body: "secret-b")
+    sign_in @user
+    get note_path(other_note)
+    assert_response :not_found
+  end
+
+  test "rendered markdown is sanitized - script tags stripped" do
+    note = @user.notes.create!(body: "<script>alert('xss')</script>**ok**")
+    sign_in @user
+    get note_path(note)
+    assert_response :ok
+    assert_no_match(/<script[^>]*>alert/, response.body)
+    assert_match "<strong>ok</strong>", response.body
+  end
 end
