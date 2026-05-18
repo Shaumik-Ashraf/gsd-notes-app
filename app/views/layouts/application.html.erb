@@ -24,6 +24,22 @@
   </head>
 
   <body>
-    <%= yield %>
+    <% if user_signed_in? %>
+      <nav class="app-nav">
+        <span class="app-nav-title">Notes</span>
+        <div class="app-nav-right">
+          <span class="app-nav-user">Signed in as <%= current_user.email %></span>
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete, form: { class: "nav-signout", data: { turbo: false } } %>
+        </div>
+      </nav>
+    <% end %>
+
+    <% flash.each do |type, msg| %>
+      <p class="flash flash-<%= type %>"><%= msg %></p>
+    <% end %>
+
+    <main class="app-main">
+      <%= yield %>
+    </main>
   </body>
 </html>

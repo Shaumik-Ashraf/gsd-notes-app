@@ -106,3 +106,226 @@ body {
 .actions input[type="submit"]:active {
   background: #1e40af;
 }
+
+/* Notes layout */
+.app-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid #d1d5db;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.app-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-nav-user {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.nav-signout button,
+.nav-signout input[type="submit"] {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-signout button:hover,
+.nav-signout input[type="submit"]:hover {
+  color: #111827;
+}
+
+.app-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Notes table */
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notes-table th {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+  background: #f9fafb;
+  border-bottom: 1px solid #d1d5db;
+  padding: 8px 16px;
+  text-align: left;
+}
+
+.notes-table td {
+  font-size: 16px;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 8px 16px;
+}
+
+.notes-table tr:hover td {
+  background: #f9fafb;
+}
+
+.notes-table td:nth-child(2),
+.notes-table td:nth-child(3) {
+  font-size: 14px;
+  color: #6b7280;
+  width: 140px;
+}
+
+.notes-table td:nth-child(4) {
+  width: 60px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.notes-table a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.notes-table a:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  padding: 48px 0;
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-state h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+/* Notes form */
+.field textarea {
+  display: block;
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #111827;
+}
+
+.field textarea:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.field input[type="file"] {
+  font-size: 14px;
+  display: block;
+  margin-top: 4px;
+}
+
+.attachment-current {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px;
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-primary:active {
+  background: #1e40af;
+}
+
+.link-muted {
+  font-size: 14px;
+  color: #6b7280;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.link-muted:hover {
+  color: #111827;
+}
+
+/* Flash messages */
+.flash {
+  padding: 8px 32px;
+  font-size: 14px;
+}
+
+.flash-notice {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.flash-alert {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+/* Error messages */
+#error_explanation {
+  margin-bottom: 16px;
+}
+
+.error-message {
+  font-size: 14px;
+  color: #dc2626;
+  margin: 4px 0;
+}

@@ -1,0 +1,39 @@
+<div class="page-header">
+  <h1>Notes</h1>
+  <%= link_to "New note", new_note_path, class: "btn-primary" %>
+</div>
+
+<% if @notes.any? %>
+  <table class="notes-table">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        <th scope="col">File</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @notes.each do |note| %>
+        <tr>
+          <td><%= link_to note.derived_title, note %></td>
+          <td><%= l(note.created_at, format: :short) %></td>
+          <td><%= l(note.updated_at, format: :short) %></td>
+          <td>
+            <% if note.file.attached? %>
+              <span aria-label="Has attachment">●</span>
+            <% else %>
+              <span aria-label="No attachment"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="empty-state">
+    <h2>No notes yet</h2>
+    <p>Create your first note to get started.</p>
+    <%= link_to "New note", new_note_path %>
+  </div>
+<% end %>

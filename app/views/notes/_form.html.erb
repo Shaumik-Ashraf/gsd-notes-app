@@ -1,0 +1,39 @@
+<%= form_with model: note do |f| %>
+  <% if note.errors.any? %>
+    <div id="error_explanation">
+      <% note.errors.full_messages.each do |msg| %>
+        <p class="error-message"><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :body, "Body (Markdown)" %>
+    <%= f.text_area :body, rows: 12 %>
+  </div>
+
+  <% if note.persisted? && note.file.attached? %>
+    <fieldset class="field">
+      <legend>Attachment</legend>
+      <p class="attachment-current">Current attachment: <%= note.file.filename %></p>
+      <div class="field">
+        <%= f.check_box :file_purge %>
+        <%= f.label :file_purge, "Remove current attachment" %>
+      </div>
+      <div class="field">
+        <%= f.label :file, "Replace with new file (optional)" %>
+        <%= f.file_field :file %>
+      </div>
+    </fieldset>
+  <% else %>
+    <div class="field">
+      <%= f.label :file, "Attachment (optional)" %>
+      <%= f.file_field :file %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit(note.persisted? ? "Update note" : "Create note", class: "btn-primary") %>
+    <%= link_to "Cancel", notes_path, class: "link-muted" %>
+  </div>
+<% end %>
