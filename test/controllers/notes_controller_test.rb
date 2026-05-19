@@ -136,4 +136,96 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_no_match(/<script[^>]*>alert/, response.body)
     assert_match "<strong>ok</strong>", response.body
   end
+
+  # ---------- edit ----------
+
+  test "GET /notes/:id/edit renders edit form for owner" do
+    note = @user.notes.create!(body: "original")
+    sign_in @user
+    get edit_note_path(note)
+    assert_response :ok
+    assert_match "original", response.body
+  end
+
+  test "GET /notes/:id/edit for another user's note returns 404" do
+    other_note = @user_b.notes.create!(body: "b-secret")
+    sign_in @user
+    get edit_note_path(other_note)
+    assert_response :not_found
+  end
+
+  # ---------- update ----------
+
+  test "PATCH /notes/:id updates body and redirects to show" do
+    note = @user.notes.create!(body: "old body")
+    sign_in @user
+    patch note_path(note), params: { note: { body: "new body line 1" } }
+    assert_redirected_to note_path(note)
+    assert_equal "new body line 1", note.reload.body
+  end
+
+  test "PATCH /notes/:id with file_purge removes the attachment" do
+    note = @user.notes.create!(body: "keep me")
+    note.file.attach(io: StringIO.new("data"), filename: "removable.txt", content_type: "text/plain")
+    sign_in @user
+    patch note_path(note), params: { note: { body: "keep me", file_purge: "1" } }
+    assert_redirected_to note_path(note)
+    assert_not note.reload.file.attached?
+  end
+
+  test "PATCH /notes/:id replacing attachment purges old blob" do
+    note = @user.notes.create!(body: "has file")
+    note.file.attach(io: StringIO.new("old"), filename: "old.txt", content_type: "text/plain")
+    old_blob_id = note.file.blob.id
+    sign_in @user
+    new_file = fixture_file_upload("report.txt", "text/plain")
+    patch note_path(note), params: { note: { body: "has file", file: new_file } }
+    assert_redirected_to note_path(note)
+    assert_equal "report.txt", note.reload.file.filename.to_s
+    assert_equal 0, ActiveStorage::Blob.where(id: old_blob_id).count
+  end
+
+  test "PATCH /notes/:id with empty body and no file re-renders edit with 422" do
+    note = @user.notes.create!(body: "doomed")
+    sign_in @user
+    patch note_path(note), params: { note: { body: "", file_purge: "0" } }
+    assert_response :unprocessable_entity
+    assert_match "A note must have a body or an attachment.", response.body
+  end
+
+  test "PATCH /notes/:id for another user's note returns 404" do
+    other_note = @user_b.notes.create!(body: "b-content")
+    sign_in @user
+    patch note_path(other_note), params: { note: { body: "hijacked" } }
+    assert_response :not_found
+    assert_equal "b-content", other_note.reload.body
+  end
+
+  # ---------- destroy ----------
+
+  test "DELETE /notes/:id removes the note and redirects to index" do
+    note = @user.notes.create!(body: "to delete")
+    sign_in @user
+    assert_difference "@user.notes.count", -1 do
+      delete note_path(note)
+    end
+    assert_redirected_to notes_path
+  end
+
+  test "DELETE /notes/:id purges the attachment synchronously" do
+    note = @user.notes.create!(body: "with file")
+    note.file.attach(io: StringIO.new("data"), filename: "bye.txt", content_type: "text/plain")
+    blob_id = note.file.blob.id
+    sign_in @user
+    delete note_path(note)
+    assert_equal 0, ActiveStorage::Blob.where(id: blob_id).count
+  end
+
+  test "DELETE /notes/:id for another user's note returns 404" do
+    other_note = @user_b.notes.create!(body: "b-to-keep")
+    sign_in @user
+    delete note_path(other_note)
+    assert_response :not_found
+    assert Note.exists?(other_note.id)
+  end
 end
