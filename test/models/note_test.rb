@@ -59,4 +59,13 @@ class NoteTest < ActiveSupport::TestCase
     @user.destroy
     assert_raises(ActiveRecord::RecordNotFound) { Note.find(note_id) }
   end
+
+  test "purging attachment before destroy removes the blob" do
+    note = Note.create!(user: @user, body: "with file")
+    note.file.attach(io: StringIO.new("data"), filename: "bye.txt", content_type: "text/plain")
+    blob_id = note.file.blob.id
+    note.file.purge
+    note.destroy
+    assert_equal 0, ActiveStorage::Blob.where(id: blob_id).count
+  end
 end
