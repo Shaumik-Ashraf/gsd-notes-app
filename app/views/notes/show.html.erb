@@ -1,6 +1,15 @@
 <%= link_to "← Notes", notes_path, class: "link-muted" %>
 
-<h1><%= @note.derived_title %></h1>
+<div class="note-show-header">
+  <h1><%= @note.derived_title %></h1>
+  <div class="note-show-actions">
+    <%= link_to "Edit", edit_note_path(@note), class: "btn-secondary" %>
+    <%= button_to "Delete", @note, method: :delete,
+          data: { turbo_confirm: "Delete this note? This action cannot be undone." },
+          class: "btn-destructive",
+          form: { data: { turbo: false } } %>
+  </div>
+</div>
 
 <p class="note-meta">
   Created <%= l(@note.created_at, format: :short) %> · Updated <%= l(@note.updated_at, format: :short) %>
@@ -19,11 +28,3 @@
     <%= sanitize(render_markdown(@note.body), tags: %w[p h1 h2 h3 h4 h5 h6 ul ol li a code pre blockquote strong em br hr], attributes: %w[href]) %>
   </div>
 <% end %>
-
-<div class="note-actions">
-  <%= link_to "Edit", edit_note_path(@note), class: "link-accent" %>
-  <%= button_to "Delete note", @note, method: :delete,
-        data: { turbo_confirm: "Delete this note? This cannot be undone." },
-        class: "btn-destructive",
-        form: { data: { turbo: false } } %>
-</div>

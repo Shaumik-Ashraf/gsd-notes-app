@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1>Notes</h1>
-  <%= link_to "New note", new_note_path, class: "btn-primary" %>
+  <%= link_to "New Note", new_note_path, class: "btn-primary" %>
 </div>
 
 <% if @notes.any? %>
@@ -10,13 +10,14 @@
         <th scope="col">Title</th>
         <th scope="col">Created</th>
         <th scope="col">Updated</th>
-        <th scope="col">File</th>
+        <th scope="col">Attachment</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
       <% @notes.each do |note| %>
-        <tr>
-          <td><%= link_to note.derived_title, note %></td>
+        <tr data-controller="row-link" data-row-link="<%= note_path(note) %>" data-action="click->row-link#click">
+          <td class="note-title-cell"><%= link_to note.derived_title, note %></td>
           <td><%= l(note.created_at, format: :short) %></td>
           <td><%= l(note.updated_at, format: :short) %></td>
           <td>
@@ -26,6 +27,14 @@
               <span aria-label="No attachment"></span>
             <% end %>
           </td>
+          <td class="actions-cell">
+            <%= link_to "✎", edit_note_path(note), class: "btn-icon", "aria-label": "Edit note" %>
+            <%= button_to "🗑", note, method: :delete,
+                  data: { turbo_confirm: "Delete this note? This action cannot be undone." },
+                  class: "btn-icon btn-icon--danger",
+                  "aria-label": "Delete note",
+                  form: { style: "display:inline" } %>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -34,6 +43,6 @@
   <div class="empty-state">
     <h2>No notes yet</h2>
     <p>Create your first note to get started.</p>
-    <%= link_to "New note", new_note_path %>
+    <%= link_to "New Note", new_note_path, class: "btn-primary" %>
   </div>
 <% end %>

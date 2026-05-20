@@ -1,15 +1,19 @@
 <%= form_with model: note do |f| %>
   <% if note.errors.any? %>
     <div id="error_explanation">
+      <h2 class="error-summary-heading"><%= pluralize(note.errors.count, "error") %> prevented this note from being saved:</h2>
       <% note.errors.full_messages.each do |msg| %>
         <p class="error-message"><%= msg %></p>
       <% end %>
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field <%= 'field--error' if note.errors[:body].any? || note.errors[:base].any? %>">
     <%= f.label :body, "Body (Markdown)" %>
-    <%= f.text_area :body, rows: 12 %>
+    <%= f.text_area :body, rows: 12, placeholder: "Write your note in markdown" %>
+    <% note.errors[:body].each do |msg| %>
+      <p class="error-message"><%= msg %></p>
+    <% end %>
   </div>
 
   <% if note.persisted? && note.file.attached? %>
@@ -20,20 +24,26 @@
         <%= f.check_box :file_purge %>
         <%= f.label :file_purge, "Remove current attachment" %>
       </div>
-      <div class="field">
+      <div class="field <%= 'field--error' if note.errors[:file].any? %>">
         <%= f.label :file, "Replace with new file (optional)" %>
         <%= f.file_field :file %>
+        <% note.errors[:file].each do |msg| %>
+          <p class="error-message"><%= msg %></p>
+        <% end %>
       </div>
     </fieldset>
   <% else %>
-    <div class="field">
+    <div class="field <%= 'field--error' if note.errors[:file].any? %>">
       <%= f.label :file, "Attachment (optional)" %>
       <%= f.file_field :file %>
+      <% note.errors[:file].each do |msg| %>
+        <p class="error-message"><%= msg %></p>
+      <% end %>
     </div>
   <% end %>
 
   <div class="actions">
-    <%= f.submit(note.persisted? ? "Update note" : "Create note", class: "btn-primary") %>
+    <%= f.submit(note.persisted? ? "Save Changes" : "Create Note", class: "btn-primary") %>
     <%= link_to "Cancel", notes_path, class: "link-muted" %>
   </div>
 <% end %>
