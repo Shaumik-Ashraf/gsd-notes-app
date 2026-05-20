@@ -71,6 +71,7 @@ Plans:
 **Goal:** The app is production-ready: secure defaults, proper error handling, clean UI, and edge cases handled.
 **Mode:** mvp
 **Requirements:** (cross-cutting — no new REQ-IDs; addresses quality across Phase 1 & 2 deliverables)
+**Plans:** 3 plans
 
 **Success Criteria:**
 
@@ -79,6 +80,16 @@ Plans:
 3. File attachment download works correctly for binary files and large files
 4. Signing in with wrong credentials shows an appropriate error message
 5. The UI is clean and navigable without a README
+
+Plans:
+**Wave 1** *(parallel — no file overlap)*
+
+- [ ] 03-01-PLAN.md — UI polish vertical slice: black-and-white CSS tokens, row-click + Actions column on notes table, top-right action bar on show page, per-field validation error UX, system tests (D-UI-01..06, D-ERR-01..02)
+- [ ] 03-02-PLAN.md — Security hardening vertical slice: strict same-origin CSP, baseline HTTP security headers initializer, restyled public error pages, integration test (D-SEC-01, D-SEC-02, D-SEC-03)
+
+**Wave 2** *(blocked on 03-02 — both touch production.rb)*
+
+- [ ] 03-03-PLAN.md — Deployment documentation vertical slice: annotate production.rb with HSTS + mailer comments, write DEPLOYMENT.md walkthrough + deploy.yml audit, human-verify checkpoint (D-MAIL-01..02, D-DEPLOY-01..02)
 
 ---
 
