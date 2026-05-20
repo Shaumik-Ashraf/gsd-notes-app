@@ -106,5 +106,17 @@ Run this via `bundle exec kamal console` after the first deploy.
 - Open DevTools Network tab on any response and confirm these headers are present:
   - `X-Frame-Options: SAMEORIGIN`
   - `X-Content-Type-Options: nosniff`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
   - `Content-Security-Policy: ... script-src 'self' ...`
   - `Strict-Transport-Security: ...` (set by Rails `force_ssl`)
+
+## Common Issues
+
+**App fails to boot: "Missing encryption configuration"**
+Active Record Encryption keys are not in credentials. Run `bin/rails db:encryption:init`, paste the output into `bin/rails credentials:edit`, and redeploy.
+
+**App fails to boot: "Missing secret_key_base" or similar**
+`RAILS_MASTER_KEY` is not reaching the container. Verify `.kamal/secrets` contains `RAILS_MASTER_KEY=<value>` and that `config/deploy.yml` lists it under `env.secret`.
+
+**Notes data lost after redeploy**
+The SQLite storage volume is not persisted. Verify `config/deploy.yml` has the `volumes` entry pointing to a host path that survives container restarts (default: `gsd_notes_app_storage:/rails/storage`).
