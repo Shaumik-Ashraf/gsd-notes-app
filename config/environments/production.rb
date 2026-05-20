@@ -25,10 +25,12 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  # config.assume_ssl = true
+  # Required when deployed behind Kamal's SSL-terminating proxy — see DEPLOYMENT.md.
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  # Required when deployed behind Kamal's SSL-terminating proxy — see DEPLOYMENT.md.
+  config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -60,7 +62,27 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
+  # Phase 3 D-MAIL-01: No delivery provider is wired by default.
+  # Choose one of the options below and uncomment it. See DEPLOYMENT.md for the full walkthrough.
+
+  # --- Sendmail (Linux VPS default — simplest) ---
+  # config.action_mailer.delivery_method = :sendmail
+  # config.action_mailer.sendmail_settings = { location: "/usr/sbin/sendmail", arguments: "-i" }
+  # config.action_mailer.perform_deliveries = true
+  # config.action_mailer.raise_delivery_errors = true
+
+  # --- Gmail SMTP ---
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: "smtp.gmail.com",
+  #   port: 587,
+  #   user_name: ENV["SMTP_USERNAME"],
+  #   password: ENV["SMTP_PASSWORD"],
+  #   authentication: :plain,
+  #   enable_starttls_auto: true
+  # }
+
+  # --- Generic SMTP (original template) ---
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
   #   password: Rails.application.credentials.dig(:smtp, :password),
@@ -68,6 +90,8 @@ Rails.application.configure do
   #   port: 587,
   #   authentication: :plain
   # }
+
+  # See DEPLOYMENT.md for full mailer configuration walkthrough.
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
